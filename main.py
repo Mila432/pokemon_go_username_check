@@ -21,7 +21,7 @@ def check(username,csrftoken,relic):
 			'Content-Type':'application/json'}
 	i='{"name":"%s"}'%(username)
 	r=s.post(check_api,data=i,headers=head)
-	return json.loads(r.content)['inuse']
+	return json.loads(r.content)['inuse'] or not json.loads(r.content)['valid']
 	
 def main():
 	csrftoken,relic= touch()
@@ -29,7 +29,7 @@ def main():
 	parser.add_argument("-u", "--username", help="Username", required=True)
 	args = parser.parse_args()
 	if check(args.username,csrftoken,relic):
-		print '[-] username taken'
+		print '[-] username taken/invalid'
 	else:
 		print '[+] username available'
 	
